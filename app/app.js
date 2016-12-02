@@ -1,18 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+import React from 'react'
+import { render } from 'react-dom'
+import { Provider } from 'react-redux'
+import { applyMiddleware, createStore } from 'redux'
+import todoApp from './reducers'
+import App from './components/App'
 
-import Home from './containers/Home';
-import About from './containers/About';
-import Layout from './containers/Layout';
+import thunk from 'redux-thunk'
+import { composeWithDevTools } from 'redux-devtools-extension'
 
-const app = document.getElementById('root');
+const middleware = applyMiddleware(thunk)
+const store = createStore(todoApp, composeWithDevTools(middleware))
 
-ReactDOM.render(
-  <Router history={browserHistory}>
-    <Route path='/' component={Layout}>
-      <IndexRoute component={Home}></IndexRoute>
-      <Route path='about' name='about' component={About}></Route>
-    </Route>
-  </Router>,
-app);
+render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+)
